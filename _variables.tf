@@ -36,7 +36,7 @@ variable "application_type" {
 
 variable "daily_data_cap_in_gb" {
   type        = number
-  description = "Specifies the Application Insights component daily data volume cap in GB. Defaults to 100."
+  description = "Specifies the Application Insights component daily data volume cap in GB. The provider has no unlimited value: null still applies its default of 100"
 }
 
 variable "daily_data_cap_notifications_enabled" {
@@ -71,7 +71,7 @@ variable "local_authentication_enabled" {
 
 variable "retention_in_days" {
   type        = number
-  description = "Specifies the retention period in days. Possible values are 30, 60, 90, 120, 180, 270, 365, 550 or 730. Defaults to 90."
+  description = "Specifies the retention period in days. Possible values are 30, 60, 90, 120, 180, 270, 365, 550 or 730. The provider cannot inherit it from the workspace: null still applies its default of 90"
 }
 
 variable "sampling_percentage" {
@@ -81,7 +81,7 @@ variable "sampling_percentage" {
 
 variable "workspace_id" {
   type        = string
-  description = "Specifies the id of a log analytics workspace resource."
+  description = "ID of an existing Log Analytics workspace. Required by this module: the component is workspace-based and the module creates no workspace"
 }
 
 variable "timeouts" {

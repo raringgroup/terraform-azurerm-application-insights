@@ -21,7 +21,7 @@
 
 ## Application Insights Context
 module "application_insights_context" {
-  source  = "../null-context"
+  source  = "git::https://github.com/raringgroup/terraform-null-context.git?ref=v0.1.0"
   context = module.context.self
 
   attributes      = ["appi"]
@@ -56,6 +56,13 @@ resource "azurerm_application_insights" "this" {
       delete = timeouts.value.delete
       read   = timeouts.value.read
       update = timeouts.value.update
+    }
+  }
+
+  lifecycle {
+    precondition {
+      condition     = var.workspace_id != null
+      error_message = "workspace_id is required: the component must be workspace-based, on an existing Log Analytics workspace."
     }
   }
 }
