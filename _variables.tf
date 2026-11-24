@@ -14,7 +14,7 @@
 ## limitations under the License.
 ## ----------------------------------------------------------------------------
 ##
-##  modules/application-insights/_variables.tf
+##  _variables.tf
 ##
 ##  Input variables for the application-insights module.
 ## ----------------------------------------------------------------------------

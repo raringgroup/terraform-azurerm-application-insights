@@ -14,7 +14,7 @@
 ## limitations under the License.
 ## ----------------------------------------------------------------------------
 ##
-##  modules/application-insights/_outputs.tf
+##  _outputs.tf
 ##
 ##  Output values for the application-insights module.
 ## ----------------------------------------------------------------------------
