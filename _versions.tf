@@ -14,7 +14,7 @@
 ## limitations under the License.
 ## ----------------------------------------------------------------------------
 ##
-##  modules/application-insights/_versions.tf
+##  _versions.tf
 ##
 ##  Terraform and AzureRM provider version constraints.
 ## ----------------------------------------------------------------------------

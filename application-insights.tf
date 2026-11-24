@@ -14,9 +14,9 @@
 ## limitations under the License.
 ## ----------------------------------------------------------------------------
 ##
-##  modules/application-insights/application-insights.tf
+##  application-insights.tf
 ##
-##  Creates an Azure Application Insights component, named and tagged through the SevenPico context module, exposing every azurerm_application_insights argument.
+##  Creates an Azure Application Insights component, named and tagged through the Raring Group context module, exposing every azurerm_application_insights argument.
 ## ----------------------------------------------------------------------------
 
 ## Application Insights Context

@@ -1,34 +1,67 @@
-# application-insights
+# terraform-azurerm-application-insights
 
-Creates a workspace-based Azure Application Insights component on an existing Log Analytics workspace, named through the `null-context` module, exposing every non-deprecated `azurerm_application_insights` argument. The module creates no workspace. For a component created together with its workspace, see the `log-analytics-workspace` module.
+Creates a workspace-based Azure Application Insights component on an existing Log Analytics workspace, exposing every non-deprecated `azurerm_application_insights` argument. The module creates no workspace. For a component created together with its workspace, see the [`terraform-azurerm-log-analytics-workspace`](https://github.com/raringgroup/terraform-azurerm-log-analytics-workspace) module.
 
-## Requirements
+Part of the [Raring Group](https://github.com/raringgroup) Terraform module library.
+
+## Usage
+
+```hcl
+module "application_insights" {
+  source = "git::https://github.com/raringgroup/terraform-azurerm-application-insights.git?ref=v0.1.0"
+
+  context = module.context.self
+
+  resource_group_name                  = "<resource-group>"
+  location                             = "<azure-region>"
+  application_type                     = "web"
+  daily_data_cap_in_gb                 = null
+  daily_data_cap_notifications_enabled = null
+  force_customer_storage_for_profiler  = null
+  internet_ingestion_enabled           = true
+  internet_query_enabled               = null
+  ip_masking_enabled                   = null
+  local_authentication_enabled         = false
+  retention_in_days                    = 90
+  sampling_percentage                  = 100
+  workspace_id                         = "<log-analytics-workspace-id>"
+  timeouts                             = null
+}
+```
+
+Naming and tagging come from [`terraform-null-context`](https://github.com/raringgroup/terraform-null-context). Add `_context.tf` to the calling configuration and pass `context = module.context.self`.
+
+See [`examples/`](examples/) for complete, runnable configurations.
+
+## Module Priority
+
+The module uses `azurerm_application_insights` directly. The generated name is limited to 260 characters, the Azure maximum. `_context.tf` declares the root context; it and the child contexts use `git::https://github.com/raringgroup/terraform-null-context.git?ref=v0.1.0`.
+
+## Naming
+
+The component name is built by the Raring Group context module from the context inputs plus the type token `appi`. These inputs produce `appi-apps-dev-example-app-eus001`:
+
+```hcl
+inputs = {
+  namespace   = "example"
+  project     = "apps"
+  environment = "dev"
+  name        = "app"
+  region      = "eus001"
+  label_order = ["attributes", "project", "environment", "namespace", "name", "region"]
+}
+```
+
+## Requirements, providers, inputs, outputs
+
+### Requirements
 
 | Name | Version |
 |------|---------|
 | terraform | `>= 1.3.0` |
 | azurerm | `>= 4.0.0, < 5.0.0` |
 
-## Module Priority
-
-No SevenPico, SevenPicoForks or CloudPosse module exists for this Azure service, so the module uses `azurerm_application_insights` directly. The generated name is limited to 260 characters, the Azure maximum. `_context.tf` declares the root context; it and the child contexts use `git::https://github.com/raringgroup/terraform-null-context.git?ref=v0.1.0`.
-
-## Naming
-
-The component name is built by `null-context` from the context inputs plus the type token `appi`. These inputs produce `appi-apps-dev-upsis-ehs-sync-clients-eus001`:
-
-```hcl
-inputs = {
-  namespace   = "upsis"
-  project     = "apps"
-  environment = "dev"
-  name        = "ehs-sync-clients"
-  region      = "eus001"
-  label_order = ["attributes", "project", "environment", "namespace", "name", "region"]
-}
-```
-
-## Inputs
+### Inputs
 
 Every azurerm argument is an input and every input is required (no defaults): pass `null` for an argument you do not want to set. Context inputs (`enabled`, `namespace`, `environment`, `stage`, `name`, `attributes`, `tags`, ...) are declared in `_context.tf`. The resource `name` and `tags` come from the context module, so they are not separate inputs. Deprecated azurerm arguments are not exposed. See https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/application_insights for the nested `timeouts` block.
 
@@ -51,7 +84,7 @@ Every azurerm argument is an input and every input is required (no defaults): pa
 | workspace_id | `string` | ID of an existing Log Analytics workspace. Required. |
 | timeouts | `object` | The timeouts block of azurerm_application_insights. |
 
-## Outputs
+### Outputs
 
 | Name | Description |
 |------|-------------|
@@ -60,38 +93,13 @@ Every azurerm argument is an input and every input is required (no defaults): pa
 | id | Resource ID (null when disabled) |
 | instrumentation_key | Instrumentation key (sensitive; null when disabled) |
 
-## Usage
+## Versioning
 
-```hcl
-terraform {
-  source = "git::https://github.com/raringgroup/terraform-azurerm-application-insights.git?ref=develop"
-}
+Releases follow semantic versioning and are tagged `vX.Y.Z`. Pin `?ref=` to a tag.
 
-inputs = {
-  enabled     = true
-  namespace   = "<namespace>"
-  project     = "<project>"
-  environment = "<environment>"
-  name        = "<name>"
-  region      = "<region-code>"
-  label_order = ["attributes", "project", "environment", "namespace", "name", "region"]
+## Contributing
 
-  resource_group_name                  = "<resource-group>"
-  location                             = "<azure-region>"
-  application_type                     = "web"
-  daily_data_cap_in_gb                 = null
-  daily_data_cap_notifications_enabled = null
-  force_customer_storage_for_profiler  = null
-  internet_ingestion_enabled           = true
-  internet_query_enabled               = null
-  ip_masking_enabled                   = null
-  local_authentication_enabled         = false
-  retention_in_days                    = 90
-  sampling_percentage                  = 100
-  workspace_id                         = "<log-analytics-workspace-id>"
-  timeouts                             = null
-}
-```
+Work happens on `develop` through feature branches and pull requests. See the Raring Group gitflow standards.
 
 ## License
 
